@@ -1,0 +1,370 @@
+<div [style.background-image]="'url(./assets/' + bgURL + ')'" style="background-size:cover;min-height: 100vh;">
+
+  <div class="main-wrapper">
+    <!-- Header Start -->
+    <header class="w3-display-container" id="home">
+      <!-- Navbar (sit on top) -->
+      <div class="w3-top w3-bar w3-white w3-wide w3-card">
+        <div class="container">
+          <a class="w3-bar-item" style="padding: 0;">
+            <img class="logo" src="assets/logo.png" alt="Logo" />
+          </a>
+          <div class="w3-right w3-hide-small">
+            <a class="w3-bar-item" *ngIf="showLogin">{{username}}</a>
+            <button mat-raised-button *ngIf="!showLogin" (click)='openLoginSignUp()'>Login/Sign Up</button>
+            <button *ngIf="showLogin" mat-raised-button (click)='clearCache()'>Logout</button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Header End -->
+
+    <div class="content-wrapper">
+      <div class="container">
+        <div class=" w3-row-padding  w3-display-middle search-wrapper">
+          <!-- Map Section Start -->
+          <div id="rcorners2" class="web-display w3-display-topright right-map-block">
+            <!-- Recent Location Start -->
+            <div class="recent-location" *ngIf="recentLocations.length > 0">
+              <div class="recent-title" style="color: #fff !important;"> Recent locations</div>
+              <div class="recent-search-block">
+                <div class="example">
+                  <mat-card style="overflow-y:visible" *ngFor="let location of recentLocations.slice(-2).reverse()">
+                    <label style="cursor: pointer;" (click)="getLocation(location)">
+                      <i style="font-size:15px;margin-right: 6px;"
+                        class="fa fa-map-marker"></i>{{location?.name}}</label>
+                  </mat-card>
+                </div>
+              </div>
+            </div>
+            <!-- Recent Location End -->
+            <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false">
+              <agm-marker *ngFor="let m of markers; let i = index" [latitude]="m.lat" [longitude]="m.lng"
+                [label]="m.label"></agm-marker>
+            </agm-map>
+          </div>
+          <!-- Map Section End -->
+          <div class="search-wrapper__inner">
+            <input class="w3-select w3-border" placeholder="search for location" autocorrect="off" autocapitalize="off"
+              spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
+            <div class="map-icon">
+              <label (click)="setCurrentPosition()" matTooltip="Current location"><i
+                  class="fa fa-map-marker"></i></label>
+            </div>
+            <!-- Map Section Start -->
+            <div id="rcorners2" class="mob-display w3-display-topright right-map-block">
+              <!-- Recent Location Start -->
+              <div class="recent-location" *ngIf="recentLocations.length > 0">
+                <div class="recent-title" style="color: #fff !important;"> Recent locations</div>
+                <div class="recent-search-block">
+                  <div class="example">
+                    <mat-card style="overflow-y:visible" *ngFor="let location of recentLocations.slice(-2).reverse()">
+                      <label style="cursor: pointer;" (click)="getLocation(location)">
+                        <i style="font-size:15px;margin-right: 6px;"
+                          class="fa fa-map-marker"></i>{{location?.name}}</label>
+                    </mat-card>
+                  </div>
+                </div>
+              </div>
+              <!-- Recent Location End -->
+              <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false"
+                [zoomControl]="false">
+                <agm-marker *ngFor="let m of markers; let i = index" [latitude]="m.lat" [longitude]="m.lng"
+                  [label]="m.label"></agm-marker>
+              </agm-map>
+            </div>
+            <!-- Map Section End -->
+            <div class="weater-top-wrapper">
+              <!-- The Weather Analysis Start -->
+              <div class="w3-display-topleft left-block">
+                <div class="services-block__inner">
+                  <div class="w3-display block-content">
+                    <div *ngIf="AvgProvider" class="cel-wrapper">
+                      <div class="cel-blcok">
+                        <div>
+                          <label
+                            *ngIf="AvgProvider[0].maxTemp && !toggleFahrenheit">{{AvgProvider[0].maxTemp| number : '.0-0'}}<span
+                              *ngIf="!toggleFahrenheit" class="cel-fer-wrapper"><span>°C</span><span>/</span><span
+                                (click)="toggleFahrenheit=!toggleFahrenheit"
+                                [ngClass]="toggleFahrenheit?'celFer day':'day'">°F</span></span>
+                            <!-- <span (click)="toggleFahrenheit=!toggleFahrenheit" [ngClass]="!toggleFahrenheit?'celFer':' '">°C</span> -->
+                            <img class="temp-img" [matTooltip]="AvgProvider[0].description"
+                              src="assets/weatherunlockImg/{{AvgProvider[0].icon}}" />
+                          </label>
+                          <label
+                            *ngIf="AvgProvider[0].maxTemp && toggleFahrenheit">{{(AvgProvider[0].maxTemp * 9)/5 + 32| number : '.0-0'}}<span
+                              *ngIf="toggleFahrenheit" class="cel-fer-wrapper"><span>°F</span><span>/</span><span
+                                (click)="toggleFahrenheit=!toggleFahrenheit"
+                                [ngClass]="toggleFahrenheit?'celFer day':'day'">°C</span></span>
+
+                            <img class="temp-img" [matTooltip]="AvgProvider[0].description"
+                              src="assets/weatherunlockImg/{{AvgProvider[0].icon}}" />
+                          </label>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="humidity-block" *ngIf="AvgProvider">
+                      <div class="humidity-block__inner">
+                        <div *ngIf="AvgProvider[0].humid"><img src="assets/icon-humidity.png" alt="" />Humidity:
+                          <span>{{AvgProvider[0].humid| number : '.0-0'}}%</span></div>
+                        <div *ngIf="AvgProvider[0].precipitation"><img src="assets/icon-precipitation.png"
+                            alt="" />Precipitation:
+                          <span>{{AvgProvider[0].precipitation| number : '.0-0'}}%</span></div>
+                        <div *ngIf="AvgProvider[0].pressure"><img src="assets/icon-pressure.png" alt="" />Pressure:
+                          <span>{{AvgProvider[0].pressure| number : '.0-0'}}mb</span></div>
+                        <div><img src="assets/icon-description.png" alt="" />Description:
+                          <span>{{AvgProvider[0].description}}</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="block-days">
+
+                    <div [ngClass]="day==0?'day-wrapper day active':'day-wrapper day '" (click)="selectedDay(0)">
+                      <div class="day-wrapper__day">{{ dates[0] | date :'EEEE' | slice:0:3 }} {{ dates[0] | date :'dd'}}
+                      </div>
+                      <div class="day-wrapper__probability">
+                        <span>
+                          <img class="temp-img" [matTooltip]="AvgProvider[0].description"
+                            src="assets/weatherunlockImg/{{AvgProvider[0].icon}}"></span>
+                      </div>
+                      <div *ngIf="!toggleFahrenheit" class="day-wrapper__max">
+                        {{AvgProvider[0].maxTemp| number : '.0-0'}}°
+                      </div>
+                      <div *ngIf="!toggleFahrenheit" class="day-wrapper__min">
+                        {{AvgProvider[0].minTemp| number : '.0-0'}}°
+                      </div>
+                      <div *ngIf="toggleFahrenheit" class="day-wrapper__max">
+                        {{(AvgProvider[0].maxTemp * 9)/5 + 32| number : '.0-0'}}°</div>
+                      <div *ngIf="toggleFahrenheit" class="day-wrapper__min">
+                        {{(AvgProvider[0].minTemp * 9)/5 + 32| number : '.0-0'}}°</div>
+                    </div>
+                    <div [ngClass]="day==1?'day-wrapper day active':'day-wrapper day '" (click)="selectedDay(1)">
+                      <div class="day-wrapper__day">{{ dates[1] | date :'EEEE' | slice:0:3 }} {{ dates[1] | date :'dd'}}
+                      </div>
+                      <div class="day-wrapper__probability">
+                        <span><img class="temp-img" [matTooltip]="AvgProvider[1].description"
+                            src="assets/weatherunlockImg/{{AvgProvider[1].icon}}"></span>
+                      </div>
+                      <div *ngIf="!toggleFahrenheit" class="day-wrapper__max">
+                        {{AvgProvider[1].maxTemp| number : '.0-0'}}°
+                      </div>
+                      <div *ngIf="!toggleFahrenheit" class="day-wrapper__min">
+                        {{AvgProvider[1].minTemp| number : '.0-0'}}°
+                      </div>
+                      <div *ngIf="toggleFahrenheit" class="day-wrapper__max">
+                        {{(AvgProvider[1].maxTemp * 9)/5 + 32| number : '.0-0'}}°</div>
+                      <div *ngIf="toggleFahrenheit" class="day-wrapper__min">
+                        {{(AvgProvider[1].minTemp * 9)/5 + 32| number : '.0-0'}}°</div>
+                    </div>
+                    <div [ngClass]="day==2?'day-wrapper day active':'day-wrapper day '" (click)="selectedDay(2)">
+                      <div class="day-wrapper__day">{{ dates[2] | date :'EEEE' | slice:0:3 }} {{ dates[2] | date :'dd'}}
+                      </div>
+                      <div class="day-wrapper__probability">
+                        <span><img class="temp-img" [matTooltip]="AvgProvider[2].description"
+                            src="assets/weatherunlockImg/{{AvgProvider[2].icon}}"></span>
+                      </div>
+                      <div *ngIf="!toggleFahrenheit" class="day-wrapper__max">
+                        {{AvgProvider[2].maxTemp| number : '.0-0'}}°
+                      </div>
+                      <div *ngIf="!toggleFahrenheit" class="day-wrapper__min">
+                        {{AvgProvider[2].minTemp| number : '.0-0'}}°
+                      </div>
+                      <div *ngIf="toggleFahrenheit" class="day-wrapper__max">
+                        {{(AvgProvider[2].maxTemp * 9)/5 + 32| number : '.0-0'}}°</div>
+                      <div *ngIf="toggleFahrenheit" class="day-wrapper__min">
+                        {{(AvgProvider[2].minTemp * 9)/5 + 32| number : '.0-0'}}°</div>
+                    </div>
+                    <div [ngClass]="day==3?'day-wrapper day active':'day-wrapper day '" (click)="selectedDay(3)">
+                      <div class="day-wrapper__day">{{ dates[3] | date :'EEEE' | slice:0:3 }} {{ dates[3] | date :'dd'}}
+                      </div>
+                      <div class="day-wrapper__probability">
+                        <span><img class="temp-img" [matTooltip]="AvgProvider[3].description"
+                            src="assets/weatherunlockImg/{{AvgProvider[3].icon}}"></span>
+                      </div>
+                      <div *ngIf="!toggleFahrenheit" class="day-wrapper__max">
+                        {{AvgProvider[3].maxTemp| number : '.0-0'}}°
+                      </div>
+                      <div *ngIf="!toggleFahrenheit" class="day-wrapper__min">
+                        {{AvgProvider[3].minTemp| number : '.0-0'}}°
+                      </div>
+                      <div *ngIf="toggleFahrenheit" class="day-wrapper__max">
+                        {{(AvgProvider[3].maxTemp * 9)/5 + 32| number : '.0-0'}}°</div>
+                      <div *ngIf="toggleFahrenheit" class="day-wrapper__min">
+                        {{(AvgProvider[3].minTemp * 9)/5 + 32| number : '.0-0'}}°</div>
+                    </div>
+                    <div [ngClass]="day==4?'day-wrapper day active':'day-wrapper day '" (click)="selectedDay(4)">
+                      <div class="day-wrapper__day">{{ dates[4] | date :'EEEE' | slice:0:3 }} {{ dates[4] | date :'dd'}}
+                      </div>
+                      <div class="day-wrapper__probability">
+                        <span><img class="temp-img" [matTooltip]="AvgProvider[4].description"
+                            src="assets/weatherunlockImg/{{AvgProvider[4].icon}}"></span>
+                      </div>
+                      <div *ngIf="!toggleFahrenheit" class="day-wrapper__max">
+                        {{AvgProvider[4].maxTemp| number : '.0-0'}}°
+                      </div>
+                      <div *ngIf="!toggleFahrenheit" class="day-wrapper__min">
+                        {{AvgProvider[4].minTemp| number : '.0-0'}}°
+                      </div>
+                      <div *ngIf="toggleFahrenheit" class="day-wrapper__max">
+                        {{(AvgProvider[4].maxTemp * 9)/5 + 32| number : '.0-0'}}°</div>
+                      <div *ngIf="toggleFahrenheit" class="day-wrapper__min">
+                        {{(AvgProvider[4].minTemp * 9)/5 + 32| number : '.0-0'}}°</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- The Weather Analysis End -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Service Provide Start -->
+        <div class="w3-container w3-display-bottomleft service-block">
+
+          <div class="w3-row-padding w3-section w3-stretch">
+            <!-- <mat-radio-group aria-label="Select an option" (change)="radioChange()" [(ngModel)]="selectedProvider"
+              [disabled]="showLoginButton" class="services-block-wrapper"> -->
+              <div class="services-block">
+                <!-- <mat-radio-button value="5"> -->
+                <div class="services-block__inner">
+
+                  <div class="block-days service-block-days">
+                    <div class="day-wrapper">
+                      <div class="day-wrapper__title"><img src="assets/Provider_Icons/the-weather-man.png"
+                          alt="The Weather Man" />The Weather Man</div>
+                      <div class="day-wrapper__probability">
+                        <span><img src="assets/windy.png" alt="" />
+                          {{AvgProvider[day].wind| number : '.0-0'}}</span>
+                      </div>
+                      <div class="day-wrapper__temp">
+                        <div *ngIf="!toggleFahrenheit" class="day-wrapper__max">
+                          {{AvgProvider[day].maxTemp| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="toggleFahrenheit" class="day-wrapper__max">
+                          {{(AvgProvider[day].maxTemp * 9)/5 + 32| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="!toggleFahrenheit" class="day-wrapper__min">
+                          {{AvgProvider[day].minTemp| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="toggleFahrenheit" class="day-wrapper__min">
+                          {{(AvgProvider[day].minTemp * 9)/5 + 32| number : '.0-0'}}°
+                        </div>
+                      </div>
+                    </div>
+                    <div class="day-wrapper"  style="cursor: pointer;" (click)="radioChange('3')">
+                      <div class="day-wrapper__title"><img src="assets/Provider_Icons/darksky.png"
+                          alt="Darksky" />Darksky
+                          <img  *ngIf="FAV_PROVIDER_ID == 3" src="assets/fav.png"alt="Darksky" />
+                      </div>
+                      <div class="day-wrapper__probability">
+                        <span><img src="assets/windy.png" alt="" />
+                          {{selectedDay1.windSpeed| number : '.0-0'}}</span>
+                      </div>
+                      <div class="day-wrapper__temp">
+                        <div *ngIf="!toggleFahrenheit" class="day-wrapper__max">
+                          {{((selectedDay1.temperatureMax -32) * 5)/9| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="toggleFahrenheit" class="day-wrapper__max">
+                          {{((((selectedDay1.temperatureMax -32) * 5)/9) * 9)/5 + 32| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="!toggleFahrenheit" class="day-wrapper__min">
+                          {{((selectedDay1.temperatureMin -32) * 5)/9| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="toggleFahrenheit" class="day-wrapper__min">
+                          {{((((selectedDay1.temperatureMin -32) * 5)/9) * 9)/5 + 32| number : '.0-0'}}°
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="day-wrapper" style="cursor: pointer;" (click)="radioChange('2')">
+                      <div class="day-wrapper__title"><img src="assets/Provider_Icons/weatherbit.png"
+                          alt="Accu Weather" />Weather Bit
+                          <img  *ngIf="FAV_PROVIDER_ID == 2" src="assets/fav.png"alt="Darksky" />
+                        </div>
+                      <div *ngIf="this.weatherInfoWeatherbit;else other_content">
+                        <div class="day-wrapper__probability">
+                          <span><img src="assets/windy.png" alt="" />
+                            {{selectedDay2.wind_spd | number : '.0-0'}}</span>
+                        </div>
+                        <div class="day-wrapper__temp">
+                          <div *ngIf="!toggleFahrenheit" class="day-wrapper__max">
+                            {{selectedDay2.max_temp | number : '.0-0'}}°
+                          </div>
+                          <div *ngIf="!toggleFahrenheit" class="day-wrapper__min">
+                            {{selectedDay2.min_temp| number : '.0-0'}}°
+                          </div>
+                          <div *ngIf="toggleFahrenheit" class="day-wrapper__max">
+                            {{((selectedDay2.max_temp * 9)/5) + 32| number : '.0-0'}}°
+                          </div>
+                          <div *ngIf="toggleFahrenheit" class="day-wrapper__min">
+                            {{((selectedDay2.min_temp * 9)/5) + 32| number : '.0-0'}}°
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="day-wrapper" style="cursor: pointer;" (click)="radioChange('1')">
+                      <div class="day-wrapper__title"><img src="assets/Provider_Icons/weatherunlocked.png"
+                          alt="Weather Unlock" />Weather Unlocked
+                          <img  *ngIf="FAV_PROVIDER_ID == 1" src="assets/fav.png"alt="Darksky" />
+                        </div>
+                      <div class="day-wrapper__probability">
+                        <span><img src="assets/windy.png" alt="" />
+                          {{selectedDay3.windspd_max_ms | number : '.0-0'}}</span>
+                      </div>
+                      <div class="day-wrapper__temp">
+                        <div *ngIf="!toggleFahrenheit" class="day-wrapper__max">
+                          {{selectedDay3.temp_max_c| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="!toggleFahrenheit" class="day-wrapper__min">
+                          {{selectedDay3.temp_min_c| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="toggleFahrenheit" class="day-wrapper__max">
+                          {{(selectedDay3.temp_max_c * 9)/5 + 32| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="toggleFahrenheit" class="day-wrapper__min">
+                          {{(selectedDay3.temp_min_c * 9)/5 + 32| number : '.0-0'}}°
+                        </div>
+                      </div>
+                    </div>
+                    <div class="day-wrapper" style="cursor: pointer;" (click)="radioChange('4')">
+                      <div class="day-wrapper__title"><img src="assets/Provider_Icons/openweathermap.png"
+                          alt="Open Weather Map" />Open Weather Map
+                          <img  *ngIf="FAV_PROVIDER_ID == 4" src="assets/fav.png"alt="Darksky" />
+                        </div>
+                      <div class="day-wrapper__probability">
+                        <span><img src="assets/windy.png" alt="" />
+                          {{selectedDay4.wind.speed| number : '.0-0'}}</span>
+                      </div>
+                      <div class="day-wrapper__temp">
+                        <div *ngIf="!toggleFahrenheit" class="day-wrapper__max">
+                          {{selectedDay4.main.temp_max - 273.5| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="!toggleFahrenheit" class="day-wrapper__min">
+                          {{selectedDay4.main.temp_min - 273.5| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="toggleFahrenheit" class="day-wrapper__max">
+                          {{((selectedDay4.main.temp_max - 273.5) * 9)/5 + 32| number : '.0-0'}}°
+                        </div>
+                        <div *ngIf="toggleFahrenheit" class="day-wrapper__min">
+                          {{((selectedDay4.main.temp_min - 273.5) * 9)/5 + 32| number : '.0-0'}}°
+                        </div>
+                      </div>
+                    </div>
+
+                    <ng-template #other_content>No data available</ng-template>
+
+                  </div>
+                </div>
+                <!-- </mat-radio-button> -->
+              </div>
+
+            <!-- </mat-radio-group> -->
+          </div>
+        </div>
+        <!-- Service Provide End -->
+      </div>
+    </div>
+
+  </div>
+</div>

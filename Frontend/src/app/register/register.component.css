@@ -1,0 +1,56 @@
+
+  .relative {
+    position: relative;
+  }
+  
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  
+ 
+  /* Set a style for all buttons */
+  button {
+    /* background-color: darkgray; */
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+     height: 50px;
+  }
+  
+  /* Extra styles for the cancel button */
+  /* Center the image and position the close button */
+  .imgcontainer {
+    text-align: center;
+    margin: 40px 0 12px 0;
+    position: relative;
+  }
+  /* .heading {
+    text-align: center;
+    margin: px 0 12px 0;
+    position: relative;
+  } */
+  img.avatar {
+    width: 40%;
+    border-radius: 50%;
+  }
+  
+  .container {
+    padding: 32px;
+
+  }
+  
+  span.psw {
+    float: right;
+    padding-top: 16px;
+  }
+
+  .mat-tab-label-content {
+    color: #fff;
+    font-size: 17px;
+  }
+ h3{color: #fff;}
+  
+.mat-tab-body-wrapper{color: #fff}

@@ -1,0 +1,42 @@
+* {
+  box-sizing: border-box;
+}
+
+.background {
+  background-image: url("/assets/weather.jpg")
+}
+
+.example-stretched-tabs {
+  width: 400px;
+}
+
+.w3-white{
+  color: #fff!important;
+  background-color: #00000063!important;
+  box-shadow: none;
+}
+.w3-bar .w3-bar-item {
+font-size: 19px;
+}
+.mat-tab-group[mat-stretch-tabs]>.mat-tab-header .mat-tab-label {
+color: #fff;
+font-size: 17px;
+} 
+.ng-star-inserted h2{color: #fff;}
+.mat-tab-body-wrapper{color: #fff}
+button {background-color: #152958}
+button:hover {
+background: #1b3471;
+}
+
+.login-wrapper {
+display: flex;
+align-items: center;
+justify-content: center;
+margin: 5% auto;
+}
+
+.mat-dialog-container {
+background: #76a1ff;
+color: rgba(255, 255, 255, 0.87);
+}

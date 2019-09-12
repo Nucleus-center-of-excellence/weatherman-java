@@ -1,0 +1,42 @@
+<form [formGroup]="addUserForm" autocomplete="off" class=" animate" action="/action_page.php">
+  <div class="imgcontainer">
+    <img src="/assets/logo.png" alt="WeatherMan logo" class="avatar">
+  </div>
+  <div class="container">
+    <input type="text" formControlName="username" placeholder="Enter user name" name="psw" required>
+    <div class="relative"
+      *ngIf="onsubmitbtn || (addUserForm.controls['username'].dirty || addUserForm.controls['username'].touched)">
+      <mat-error class="error-msg" *ngIf="addUserForm.controls['username'].hasError('required')">
+        User Name is required
+      </mat-error>
+    </div>
+    <input type="text" formControlName="email" placeholder="Enter email" name="psw" required>
+    <div class="relative"
+      *ngIf="onsubmitbtn || (addUserForm.controls['email'].dirty || addUserForm.controls['email'].touched)">
+      <mat-error *ngIf="addUserForm.controls['email'].hasError('pattern') ">
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf="addUserForm.controls['email'].hasError('required')">
+        Email is required
+      </mat-error>
+    </div>
+
+    <input type="password" formControlName="password" placeholder="Enter password" name="psw" required>
+    <div class="relative"
+      *ngIf="onsubmitbtn || (addUserForm.controls['password'].dirty || addUserForm.controls['password'].touched)">
+      <mat-error class="error-msg" *ngIf="addUserForm.controls['password'].hasError('required')">
+        Password is required
+      </mat-error>
+    </div>
+
+
+    <input type="password" formControlName="confirmPassword" placeholder="Confirm password" name="psw" required>
+    <div class="relative"
+      *ngIf="onsubmitbtn || (addUserForm.controls['confirmPassword'].dirty || addUserForm.controls['confirmPassword'].touched)">
+      <mat-error class="error-msg" *ngIf="addUserForm.controls['confirmPassword'].hasError('required')">
+        Confirm Password is required
+      </mat-error>
+    </div>
+    <button (click)="onSubmit(addUserForm)">Sign Up</button>
+  </div>
+</form>

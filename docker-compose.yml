@@ -1,0 +1,71 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    expose:
+      - 6379
+
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - ./Backend/my-db:/var/lib/mysql
+
+  java:
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+    links:
+      - mysql
+      - redis
+    restart: always
+    ports:
+      - 8080:8080
+    volumes:
+      - ~/Backend/.m2:/root/.m2
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - GOOGLE_MAP_KEY=${GOOGLE_MAP_KEY}
+
+      - OPENWEATHERMAP_API_KEY_1=${OPENWEATHERMAP_API_KEY_1}
+      - DARKSKY_API_KEY_1=${DARKSKY_API_KEY_1}
+      - WEATHERUNLOCKED_API_KEY_1=${WEATHERUNLOCKED_API_KEY_1}
+      - WEATHERUNLOCKED_APPID_1=${WEATHERUNLOCKED_APPID_1}
+      - WEATHERBIT_API_KEY_1=${WEATHERBIT_API_KEY_1}
+
+      - OPENWEATHERMAP_API_KEY_2=${OPENWEATHERMAP_API_KEY_2}
+      - DARKSKY_API_KEY_2=${DARKSKY_API_KEY_2}
+      - WEATHERUNLOCKED_API_KEY_2=${WEATHERUNLOCKED_API_KEY_2}
+      - WEATHERUNLOCKED_APPID_2=${WEATHERUNLOCKED_APPID_2}
+      - WEATHERBIT_API_KEY_2=${WEATHERBIT_API_KEY_2}
+
+      - OPENWEATHERMAP_API_KEY_3=${OPENWEATHERMAP_API_KEY_3}
+      - DARKSKY_API_KEY_3=${DARKSKY_API_KEY_3}
+      - WEATHERUNLOCKED_API_KEY_3=${WEATHERUNLOCKED_API_KEY_3}
+      - WEATHERUNLOCKED_APPID_3=${WEATHERUNLOCKED_APPID_3}
+      - WEATHERBIT_API_KEY_3=${WEATHERBIT_API_KEY_3}
+
+      - OPENWEATHERMAP_API_KEY_4=${OPENWEATHERMAP_API_KEY_4}
+      - DARKSKY_API_KEY_4=${DARKSKY_API_KEY_4}
+      - WEATHERUNLOCKED_API_KEY_4=${WEATHERUNLOCKED_API_KEY_4}
+      - WEATHERUNLOCKED_APPID_4=${WEATHERUNLOCKED_APPID_4}
+      - WEATHERBIT_API_KEY_4=${WEATHERBIT_API_KEY_4}
+
+  angular:
+      build:
+        context: .
+        dockerfile: Frontend/Dockerfile
+      ports:
+        - 80:3000

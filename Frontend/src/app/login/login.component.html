@@ -1,0 +1,58 @@
+<div *ngIf="!showForgotPassWord">
+  <form [formGroup]="loginForm" autocomplete="off" class=" animate" action="/action_page.php">
+    <div class="imgcontainer">
+      <img src="/assets/logo.png" alt="Avatar" class="avatar">
+    </div>
+    <div class="container">
+
+      <input type="text" formControlName="email" placeholder="Enter email" name="psw" required>
+      <div class="relative"
+        *ngIf="onsubmitbtn || (loginForm.controls['email'].dirty || loginForm.controls['email'].touched)">
+        <mat-error *ngIf="loginForm.controls['email'].hasError('pattern') ">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
+          Email is required
+        </mat-error>
+      </div>
+
+      <input type="password" formControlName="password" placeholder="Enter password" name="psw" required>
+      <div class="relative"
+        *ngIf="onsubmitbtn || (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)">
+        <mat-error class="error-msg" *ngIf="loginForm.controls['password'].hasError('required')">
+          Password is required
+        </mat-error>
+      </div>
+
+      <span class="psw"> <a class="cursor-pointer" (click)="showForgotPassWord = !this.showForgotPassWord">Forgot
+          password?</a></span>
+      <button (click)="onSubmit(loginForm)">Log In</button>
+    </div>
+  </form>
+</div>
+
+<div *ngIf="showForgotPassWord">
+
+  <form [formGroup]="forgotPasswordform" class=" animate" action="/action_page.php">
+    <div class="imgcontainer">
+      <img src="/assets/logo.png" alt="Avatar" class="avatar">
+      <h2>Forgot Password</h2>
+    </div>
+    <div class="container">
+
+      <input type="text" name="psw" formControlName="email" placeholder="Enter email" class="form-control" />
+      <div class="relative"
+        *ngIf="onsubmitbtnfpwd || (forgotPasswordform.controls['email'].dirty || forgotPasswordform.controls['email'].touched)">
+        <mat-error *ngIf="forgotPasswordform.controls['email'].hasError('pattern') ">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="forgotPasswordform.controls['email'].hasError('required')">
+          Email is required
+        </mat-error>
+      </div>
+      <button (click)="sendLink(forgotPasswordform)">Send Link</button>
+      <button (click)="showForgotPassWord = !this.showForgotPassWord"> Back to Log In</button>
+    </div>
+
+  </form>
+</div>

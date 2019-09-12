@@ -1,0 +1,16 @@
+<div mat-dialog-container>
+  <div [ngClass]="{'hide': modalTitle == ''}">
+    <h4 mat-dialog-title>{{modalTitle}}</h4>
+  </div>
+  <div class="mat-body">
+    <div class="message">
+      <div class="break-word" [innerHtml]="htmlContent"></div>
+    </div>
+    <div mat-dialog-actions>
+      <button *ngIf="button1" mat-flat-button class="bg-dark-green" (click)="onYes()"
+              cdkFocusInitial
+              (keydown.enter)="closeDialogBox()" tabindex="-1">{{button1}}</button>
+      <button *ngIf="button2" mat-flat-button class="bg-brown" (click)="onNo()" tabindex="-1">{{button2}}</button>
+    </div>
+  </div>
+</div>

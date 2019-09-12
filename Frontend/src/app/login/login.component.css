@@ -1,0 +1,59 @@
+
+  .relative {
+    position: relative;
+  }
+  
+  .cursor-pointer {
+    cursor: pointer;
+  }  
+  /* Set a style for all buttons */
+  button {
+    /* background-color: darkgray; */
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  
+  
+  /* Extra styles for the cancel button */
+  
+  
+  /* Center the image and position the close button */
+  .imgcontainer {
+    text-align: center;
+    margin: 40px 0 12px 0;
+    position: relative;
+  }
+  /* .heading {
+    text-align: center;
+    margin: px 0 12px 0;
+    position: relative;
+  } */
+  img.avatar {
+    width: 40%;
+    border-radius: 50%;
+  }
+  img.avatar2 {
+    width: 40%;
+    border-radius: 50%;
+  }
+  .container {
+    padding: 20px 32px 40px;
+  }
+  
+  span.psw {
+    float: right;
+    padding: 15px 0 0;
+  }
+  /* Modal Content/Box */
+
+
+.ng-star-inserted h2{color: #fff;}
+h2{color: #fff}
+.mat-tab-body-wrapper{color: #fff}
+
+  
