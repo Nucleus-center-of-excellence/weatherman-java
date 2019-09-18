@@ -1,7 +1,5 @@
 <h1 align="center">
   <br>
-  <a><img src="https://github.com/abhishek-sisodiya/theweatherman/blob/master/Backend/docs/images/logo.png" alt="spring boot"></a>
-  <br>
   The WeatherMan Application
   <br>
 </h1>
