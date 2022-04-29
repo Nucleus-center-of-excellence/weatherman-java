@@ -29,7 +29,7 @@
     "@types/google-maps": "^3.2.0",
     "@types/googlemaps": "^3.36.6",
     "angular-maps": "^6.0.1",
-    "async": "^2.5.0",
+    "async": "^2.6.4",
     "bingmaps": "^2.0.3",
     "core-js": "^2.5.4",
     "crypto-js": "^3.1.9-1",
